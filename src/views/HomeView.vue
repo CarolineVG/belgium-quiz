@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import Question from "../components/Question.vue"
+
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <Question></Question>
   </main>
 </template>
+
+<style>
+</style>
