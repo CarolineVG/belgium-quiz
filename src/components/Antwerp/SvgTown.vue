@@ -73,7 +73,20 @@ const emit = defineEmits(['getTownById']);
 
 function onTown(event: Event){
     if (event.target instanceof Element) {
-        const id = event.target.id;
+        const id = event.target.id
+        // make everything yellow again
+
+        let allTowns = <HTMLCollection>document.getElementById("Communes/Gemeente/Gemeinden")?.children;
+        if(allTowns){
+            for(let y = 0; y < allTowns.length; y++){
+                let t = <HTMLElement>allTowns[y];
+                t.style.color = "yellow"; 
+            }
+        }
+        
+        // highlight current town 
+        let currentTown = <HTMLElement>document.getElementById(id)
+        currentTown.style.color = "blue"
         emit('getTownById', id)
     }
 }

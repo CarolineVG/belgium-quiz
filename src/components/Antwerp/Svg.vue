@@ -5,6 +5,8 @@ import SvgTown from "./SvgTown.vue"
 const emit = defineEmits(['getTown']);
 
 const getTownById = (event: string) => {
+    // change color
+    
     emit('getTown', event);
 }
 
@@ -18,7 +20,11 @@ const getTownById = (event: string) => {
 </template>
 
 <style>
+svg {
+    height: 600px;
+}
 .currentColor {
     color: red;
 }
+
 </style>

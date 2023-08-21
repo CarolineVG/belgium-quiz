@@ -1,11 +1,19 @@
 <script setup lang="ts">
-import Question from "../components/Question.vue"
+import Quiz from "../components/Quiz.vue"
+import Card from "../components/Card.vue"
+import {ref} from "vue"
+import data from "../data/data.json"
+
+const quizes = ref(data);
 
 </script>
 
 <template>
   <main>
-    <Question></Question>
+    <H1>HOME</H1>
+    <div class="quizes">
+      <Card v-for="quiz in quizes" :key="quiz.id" :quiz="quiz"></Card>
+    </div>
   </main>
 </template>
 

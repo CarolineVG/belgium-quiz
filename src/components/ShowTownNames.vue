@@ -1,22 +1,19 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref, watch } from "vue";
 import Svg from "../components/Antwerp/Svg.vue"
 
-let townName = ref("test");
-/*townName = "test";*/
+const townName = ref('')
 
 function showTown(event: string) {
-    console.log(event);
+    townName.value = event;
+    console.log(townName.value) 
 }
-
-
-
 </script>
 
 <template>
     <div class="container">
         <h1 class="question">Toon gemeentes</h1>
-        <h2 class="town" ref="townName"></h2>
+        <h2 class="town">Gemeente: {{ townName }}</h2>
         <Svg @getTown="showTown($event)"></Svg>
     </div>
     
