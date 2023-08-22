@@ -20,8 +20,15 @@ for(let i = 0; i < data.length; i++){
         quiz = data[i];
     }
 }
-const towns = quiz.questions
-console.log(towns);
+
+// generate 5 random towns
+const shuffledAllTowns = quiz.towns.sort(() => 0.5 - Math.random());
+let selectedTowns = shuffledAllTowns.slice(0, 5);
+console.log(selectedTowns);
+
+
+//const towns = quiz.questions
+const towns = selectedTowns;
 
 /* ---- vars ---- */
 let feedback = ref('?')
@@ -53,8 +60,6 @@ function checkTown(event: string) {
         }
         answers.push(item)
     }
-    // disable svg
-
     // show next question
     showNextQuestion = true;
 }
@@ -76,38 +81,76 @@ function nextQuestion(){
 </script>
 
 <template>
-    <div class="container" v-show="quizState=='ongoing'">
-        <h1 class="question">Duid {{ towns[currentQuestion] }} aan</h1>
-        <h2>{{ feedback }}</h2>
-        <h3>Score: {{ score }}</h3>
-        <div v-if="!showNextQuestion" class="svg-clickable">
-            <Svg @getTown="checkTown($event)"></Svg>
-        </div>
-        <div v-else-if="showNextQuestion" class="svg-non-clickable">
-            <Svg></Svg>
-        </div>
-    </div>
-
-    <div class="next-overlay" v-show="showNextQuestion">
-        <button type="button" class="btnNext" v-on:click="nextQuestion">Volgende</button>
-    </div>
-
-    <div class="start-overlay" v-show="quizState=='start'">
+    <div class="container">
         <h1>Quiz: {{ quiz.name }}</h1>
-        <button type="button" class="btnStart" v-on:click="startQuiz">Start quiz</button>
-    </div>
-    
-    <div class="end-overlay" v-show="quizState=='end'">
-        <h1>End</h1>
-        <h2>Score: {{ score }}</h2>
-        <ul>
-            <li v-for="item in answers">{{ item.id }}: {{ item.answer  }}</li>
-        </ul>
+        <div class="quiz" v-show="quizState=='ongoing'">
+            <h2 class="question">Duid {{ towns[currentQuestion] }} aan</h2>
+            <p>{{ feedback }}</p>
+            <p>Score: {{ score }}</p>
+            <div v-if="!showNextQuestion" class="svg-clickable">
+                <Svg @getTown="checkTown($event)"></Svg>
+            </div>
+            <div v-else-if="showNextQuestion" class="svg-non-clickable">
+                <Svg></Svg>
+            </div>
+        </div>
+
+        <div class="next-overlay" v-show="showNextQuestion">
+            <button type="button" class="btnNext" v-on:click="nextQuestion">Volgende</button>
+        </div>
+
+        <div class="start-overlay" v-show="quizState=='start'">
+            <div class="start-ui">
+                <button type="button" class="btnStart" v-on:click="startQuiz">Start quiz</button>
+            </div>
+        </div>
+        
+        <div class="end-overlay" v-show="quizState=='end'">
+            <h1>End</h1>
+            <h2>Score: {{ score }}</h2>
+            <ul>
+                <li v-for="item in answers">{{ item.id }}: {{ item.answer  }}</li>
+            </ul>
+        </div>
     </div>
 </template>
 
 <style>
 .container {
     max-width: 1000px;
+}
+.start-overlay{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    padding: 0 auto;
+}
+.start-ui{
+    margin: 1rem;
+    width: 500px;
+    height: 500px;
+    background-color: var(--beige);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 2%;
+}
+
+
+button {
+  background-color: var(--green);
+  border: none;
+  color: white;
+  padding: 1em 1em;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.4em;
+  cursor: pointer;
+}
+button:hover {
+  opacity: 90%;
 }
 </style>

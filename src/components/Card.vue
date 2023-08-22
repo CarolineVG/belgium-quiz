@@ -14,29 +14,33 @@ const navigateToQuiz = () => {
     <img :src="quiz.img" alt="">
     <div class="card-text">
         <h2>{{quiz.name}}</h2>
-        <p>{{quiz.questions.length}}</p>
+        <p>{{quiz.questions.length}} vragen</p>
     </div>
 </div>
 </template>
 
 <style scoped>
 .card {
-    width: 310px;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    min-width: 200px;
     overflow: hidden;
+    border: 2px solid var(--blue);
     border-radius: 2%;
-    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 35px;
     margin-right: 20px;
     cursor: pointer;
+    background-color: var(--green);
   }
   .card img {
     width: 100%;
-    height: 190px;
     margin: 0;
   }
   .card .card-text {
     padding: 0 5px;
-    color: var(--white);
+    color: var(--beige);
+    background-color: var(--green);
   }
   .card h2 {
     font-weight: bold;
