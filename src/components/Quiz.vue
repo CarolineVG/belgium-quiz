@@ -12,7 +12,7 @@ const quizId: number = + route.params.id;
 
 /* ---- vars ---- */
 const QUIZLEVELS:Array<string> = ["Makkelijk", "Normaal", "Moeilijk"];
-let quizData:IProvince = ref({}); 
+let quizDataProvinces:Array<IProvince> = [];
 let questions:Array<string> = [];
 let currentQuestion:number = 0;
 let showNextQuestion:boolean = false;
@@ -34,12 +34,13 @@ onMounted(() => {
 /* ---- methods ---- */
 function getQuizData(){
     if(!localStorage.getItem("data")) {
-        quizData = dataProvince;
+        for(let i = 0; i < dataProvince.length; i++){
+            quizDataProvinces.push(dataProvince[i])
+        }
     } else {
-        quizData = JSON.parse(localStorage.getItem("data") || "[]");;
+        let jsondata = JSON.parse(localStorage.getItem("data") || "[]");
+        quizDataProvinces = jsondata;
     }
-    quizName.value = quizData[quizId].name;
-    console.log(quizData)
 }
 
 function startQuiz(){
@@ -72,9 +73,9 @@ function generateQuestions(quizLevel:string, amount:number){
     let towns = [];
     let selectedLevel = levelToNumber(quizLevel);
 
-    for(let i = 0; i < quizData[quizId].towns.length; i++){
-        if(quizData[quizId].towns[i].level == selectedLevel){
-            towns.push(quizData[quizId].towns[i].name)
+    for(let i = 0; i < quizDataProvinces[quizId].towns.length; i++){
+        if(quizDataProvinces[quizId].towns[i].level == selectedLevel){
+            towns.push(quizDataProvinces[quizId].towns[i].name)
         }
     }
     const shuffledTowns = towns.sort(() => 0.5 - Math.random());
@@ -84,7 +85,7 @@ function generateQuestions(quizLevel:string, amount:number){
 }
 
 function checkTown(event: string) {
-    if(event==questions[currentQuestion]){
+    if(event.toLowerCase()==questions[currentQuestion].toLowerCase()){
         feedback.value = 'correct, gemeente is ' + event;
         score.value++;
         let item: {id: string, answer: string} = {

@@ -1,6 +1,6 @@
 import ITown from "../interfaces/ITown"
 
-export interface IProvince {
+export default interface IProvince {
     id: number
     name: string
     img: string

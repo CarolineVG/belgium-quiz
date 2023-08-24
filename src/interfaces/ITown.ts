@@ -1,4 +1,4 @@
-export interface ITown {
+export default interface ITown {
     id: number
     name: string
     province: string

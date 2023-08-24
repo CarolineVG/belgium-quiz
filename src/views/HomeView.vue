@@ -2,38 +2,8 @@
 import Card from "../components/Card.vue"
 import {ref} from "vue"
 import data from "../data/Province.json"
-import ITown from "../interfaces/ITown"
 
 const quizes = ref(data); //todo use json file? 
-
-
-
-// todo generate all towns with default data 
-console.log(data);
-let testTowns:ITown = [];
-//createallTowns()
-
-function createallTowns(){
-    for(let i = 0; i < data.length; i++){
-        if(data[i].id === 4){
-            const antwerp = data[i];
-            if(antwerp.towns){
-                for(let y = 0; y < antwerp.towns.length; y++){
-                    const t: ITown = {
-                        "id": y,
-                        "name": antwerp.towns[y],
-                        "province": data[i].name,
-                        "level": 0 // 0 -> easy, 1 -> medium, 2 -> hard 
-                    }
-                    testTowns.push(t);
-                }
-            }
-        }
-    }
-    
-  console.log(testTowns)
-}
-
 
 </script>
 

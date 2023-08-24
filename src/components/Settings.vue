@@ -1,41 +1,38 @@
 <script setup lang="ts">
-import ITown from "../interfaces/ITown"
 import IProvince from "../interfaces/IProvince"
 import { ref, onMounted } from 'vue'
 import dataProvince from "../data/Province.json"
 
 /* ---- vars ---- */
-let quizData:IProvince = ref({});
-let antwerpTowns: Array<ITown> = [];
+let quizDataProvinces:Array<IProvince> = [];
+let province = ref(0);
 getQuizData();
-let showAntwerpTowns = ref(antwerpTowns); 
-    
 
 /* ---- methods ---- */
 function getQuizData(){
     if(!localStorage.getItem("data")) {
-        quizData = dataProvince;
+        for(let i = 0; i < dataProvince.length; i++){
+            quizDataProvinces.push(dataProvince[i])
+        }
     } else {
-        quizData = JSON.parse(localStorage.getItem("data") || "[]");;
+        let jsondata = JSON.parse(localStorage.getItem("data") || "[]");
+        quizDataProvinces = jsondata;
     }
-    // todo change from antwerp to all 
-    antwerpTowns = quizData[0].towns;
-    console.log(antwerpTowns)
 }
 
-function editTownLevel(id:number, input:string){
-    let level = parseInt(input);
-    // todo: quizdata[0] == antwerpen!! 
-    for(let y = 0; y < quizData[0].towns.length; y++){
+function editTownLevel(id:number, input:number){
+    let level = input;
+    for(let y = 0; y < quizDataProvinces[province.value].towns.length; y++){
         if(y==id){
-            quizData[0].towns[y].level = level;
+            quizDataProvinces[province.value].towns[y].level = level;
         }
     }
     addToLocalStorage();
 }
 
 function addToLocalStorage() {
-    localStorage.setItem("Antwerpen", JSON.stringify(quizData));
+    console.log(quizDataProvinces);
+    localStorage.setItem("data", JSON.stringify(quizDataProvinces));
 }
 
 function levelToText(input:number){
@@ -60,30 +57,45 @@ function levelToText(input:number){
 </script>
 
 <template>
-    <div class="container">
-      <h1>Antwerpen</h1>
-      <form action="">
-      <div class="all-towns">
-        <div v-for="(town, index) in showAntwerpTowns" class="town-card">
-            <div class="item">
-                <p>{{ town.name }}</p>
-            </div>
-            <div class="item">
-                <select 
-                    @change="editTownLevel(index, town.level)"
-                    v-model="town.level" 
-                    :id="'t_' + index" 
-                    :name="'t_' + index" 
-                >
-                    <option value="0">{{ levelToText(0) }}</option>
-                    <option value="1">{{ levelToText(1) }}</option>
-                    <option value="2">{{ levelToText(2) }}</option>
-                </select>
-            </div>
-        </div>
-      </div>
-    </form>
+<div class="container">
+    <div class="settings-dropdown">
+        <select 
+            @change="getQuizData()"
+            v-model="province"
+        >
+            <option value=0>Antwerpen</option>
+            <option value=1>West-Vlaanderen</option>
+            <option value=2>Oost-Vlaanderen</option>
+            <option value=3>Limburg</option>
+            <option value=4>Vlaams-Brabant</option>
+        </select>
     </div>
+
+    <div class="settings-province" >
+        <h1>{{ quizDataProvinces[province].name }}</h1>
+        <div class="all-towns">
+            <div v-for="(town, index) in quizDataProvinces[province].towns" class="town-card">
+                <div class="item">
+                    <p>{{ town.name }}</p>
+                </div>
+                <div class="item">
+                    <select 
+                        @change="editTownLevel(index, town.level)"
+                        v-model="town.level" 
+                        :id="'t_' + index" 
+                        :name="'t_' + index" 
+                    >
+                        <option value="0">{{ levelToText(0) }}</option>
+                        <option value="1">{{ levelToText(1) }}</option>
+                        <option value="2">{{ levelToText(2) }}</option>
+                    </select>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+      
     
 </template>
 
