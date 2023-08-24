@@ -14,7 +14,6 @@ const navigateToQuiz = () => {
     <img :src="quiz.img" alt="">
     <div class="card-text">
         <h2>{{quiz.name}}</h2>
-        <p>{{quiz.questions.length}} vragen</p>
     </div>
 </div>
 </template>

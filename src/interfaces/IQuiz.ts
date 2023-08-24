@@ -3,5 +3,4 @@ export interface IQuiz {
     name: string
     img: string
     towns: Array<string>
-    questions: Array<string>
 }

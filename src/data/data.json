@@ -73,17 +73,14 @@
             "Zandhoven",
             "Zoersel",
             "Zwijndrecht"
-        ],
-        "questions": [
-            "Putte", "Mechelen", "Lier", "Antwerpen"
         ]
     },
     {
         "id": 1,
         "name": "West-Vlaanderen",
         "img": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Provincie_West-Vlaanderen_in_Belgium.svg/1280px-Provincie_West-Vlaanderen_in_Belgium.svg.png",
-        "questions": [
-            "Roeselare"
+        "towns": [
+            "a"
         ]
     }
 ]

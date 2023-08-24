@@ -72,10 +72,12 @@ import Zwijndrecht from "./Towns/Zwijndrecht.vue";
 const emit = defineEmits(['getTownById']);
 
 function onTown(event: Event){
+    console.log("on town");
     if (event.target instanceof Element) {
         const id = event.target.id
-        // make everything yellow again
+        console.log(id)
 
+        // make everything yellow again
         let allTowns = <HTMLCollection>document.getElementById("Communes/Gemeente/Gemeinden")?.children;
         if(allTowns){
             for(let y = 0; y < allTowns.length; y++){
@@ -84,7 +86,7 @@ function onTown(event: Event){
             }
         }
         
-        // highlight current town 
+        // highlight current town
         let currentTown = <HTMLElement>document.getElementById(id)
         currentTown.style.color = "blue"
         emit('getTownById', id)
@@ -182,7 +184,7 @@ function onTown(event: Event){
     color: yellow;
 }
 .town:hover {
-    opacity: 50%;
+    color: red;
     cursor: pointer;
 }
 </style>

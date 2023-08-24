@@ -1,51 +1,54 @@
 <script setup lang="ts">
-import IProvince from "../interfaces/IProvince"
+import IQuiz from "../interfaces/IQuiz"
+import ITown from "../interfaces/IQuiz"
 import {useRoute} from "vue-router";
-import { ref, onMounted } from 'vue'
-import dataProvince from "../data/Province.json"
-// todo: svg from all provinces! 
 import Svg from "../components/Antwerp/Svg.vue"
+import { ref } from "vue"
 
 /* ---- get quiz id ---- */
+let quiz:IQuiz = {};
 const route = useRoute();
 const quizId: number = + route.params.id;
+if(quizId === 0){ 
+    quiz.name = "Antwerpen";
+}
 
-/* ---- vars ---- */
-const QUIZLEVELS:Array<string> = ["Makkelijk", "Normaal", "Moeilijk"];
-let quizData:IProvince = ref({}); 
+/* ---- game vars ---- */
+const quizLevels:Array<string> = ["Makkelijk", "Normaal", "Moeilijk"];
+let allTowns:Array<ITown> = [];
 let questions:Array<string> = [];
+let quizLevel:string = "";
 let currentQuestion:number = 0;
 let showNextQuestion:boolean = false;
 let answers: {id: string, answer: string}[] = [];
 
 /* ---- ui vars ---- */
-let quizName = ref("");
 let quizLevelChoice = ref();
 let feedback = ref('?')
 let score = ref(0);
 let quizState = ref('start');
 
-
-// loaded
-onMounted(() => {
-  getQuizData();
-})
-
 /* ---- methods ---- */
-function getQuizData(){
-    if(!localStorage.getItem("data")) {
-        quizData = dataProvince;
-    } else {
-        quizData = JSON.parse(localStorage.getItem("data") || "[]");;
-    }
-    quizName.value = quizData[quizId].name;
-    console.log(quizData)
+function startQuiz(){
+    loadQuiz();
+    quizState.value = 'ongoing';
 }
 
-function startQuiz(){
-    questions = generateQuestions(quizLevelChoice.value, 5);
-    quizState.value = 'ongoing';
-    console.log(questions)
+function loadQuiz(){
+    if(quizId === 0){ 
+        // ANTWERPEN 
+        if(!localStorage.getItem("Antwerpen")) {
+            // no data in local storage yet
+            allTowns = [];
+            createallTowns();
+        } else {
+            // get data from local storage
+            let localData = JSON.parse(localStorage.getItem("Antwerpen") || "[]");
+            allTowns = localData;
+        }
+    }
+    quizLevel = quizLevelChoice.value
+    questions = generateQuestions(quizLevel, 5); // amount of questions
 }
 
 function levelToNumber(input:string){
@@ -72,15 +75,19 @@ function generateQuestions(quizLevel:string, amount:number){
     let towns = [];
     let selectedLevel = levelToNumber(quizLevel);
 
-    for(let i = 0; i < quizData[quizId].towns.length; i++){
-        if(quizData[quizId].towns[i].level == selectedLevel){
-            towns.push(quizData[quizId].towns[i].name)
+    for(let i = 0; i < allTowns.length; i++){
+        if(allTowns[i].level == selectedLevel){
+            towns.push(allTowns[i].name)
         }
     }
     const shuffledTowns = towns.sort(() => 0.5 - Math.random());
     let selectedTowns = shuffledTowns.slice(0, amount);
 
     return selectedTowns;
+}
+
+function filterTownsByLevel(){
+
 }
 
 function checkTown(event: string) {
@@ -107,6 +114,8 @@ function checkTown(event: string) {
 function checkEnd(){
     if(currentQuestion>=questions.length){
         quizState.value = 'end';
+        console.log("end");
+        // show end screen
     }
 }
 
@@ -117,11 +126,17 @@ function nextQuestion(){
     showNextQuestion = false;
 }
 
+function editTownLevel(input:string){
+    quizLevel = input; 
+}
+
+
+
 </script>
 
 <template>
     <div class="container">
-        <h1>Quiz: {{ quizName }} ({{ quizLevelChoice }})</h1>
+        <h1>Quiz: {{ quiz.name }} ({{ quizLevelChoice }})</h1>
         <div class="quiz" v-show="quizState=='ongoing'">
             <h2 class="question">Duid {{ questions[currentQuestion] }} aan</h2>
             <p>{{ feedback }}</p>
@@ -141,12 +156,12 @@ function nextQuestion(){
         <div class="start-overlay" v-show="quizState=='start'">
             <div class="start-ui">
                 <h1>Level:</h1>
-                <div v-for="item in QUIZLEVELS">
+                <div v-for="item in quizLevels">
                     <input v-model="quizLevelChoice" type="radio" :id="item" :value="item"/>
                     <label for="one">{{item}}</label>
                 </div>
 
-                <p>Totaal aantal gemeentes: todo </p>
+                <p>Totaal aantal gemeentes: {{allTowns.length}} </p>
 
                 <button type="button" class="btnStart" v-on:click="startQuiz">Start quiz</button>
                 <h1>{{ quizLevelChoice }}</h1>
@@ -156,7 +171,7 @@ function nextQuestion(){
         <div class="end-overlay" v-show="quizState=='end'">
             <h1>End</h1>
             <h2>Score: {{ score }}</h2>
-            <h3>Level: {{ quizLevelChoice }}</h3>
+            <h3>Level: {{ quizLevel }}</h3>
             <ul>
                 <li v-for="item in answers">{{ item.id }}: {{ item.answer  }}</li>
             </ul>
