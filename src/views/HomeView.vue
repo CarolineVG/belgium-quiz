@@ -47,7 +47,7 @@ const quizes = ref(data); //todo use json file?
   to {background-position: -50px 0px; scale: 1.2;}
 }
 */
-body {
+/*body {
   height: 100vh;
   background-image: url("../assets/pixijs/city2/4.png"), url("../assets/pixijs/city2/3.png"), url("../assets/pixijs/city2/2.png"), url("../assets/pixijs/city2/1.png");
   background-repeat: no-repeat, repeat;
@@ -58,7 +58,7 @@ body {
   animation-iteration-count: infinite;
   animation-direction: alternate;
   animation-timing-function: linear;
-}
+}*/
 h1 {
   font-weight: 600;
 }
