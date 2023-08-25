@@ -14,8 +14,5 @@ import Settings from "../components/Settings.vue"
 </template>
 
 <style>
-.container {
-}
-@media (min-width: 1024px) {
-}
+
 </style>

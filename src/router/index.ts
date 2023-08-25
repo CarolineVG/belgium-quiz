@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import home from '../views/home.vue'
 
 const router = createRouter({
@@ -15,11 +14,6 @@ const router = createRouter({
       name: 'quiz',
       component: () => import('../views/QuizView.vue'),
       props: {test: true}
-    },
-    {
-      path: '/about',
-      name: 'about',
-      component: () => import('../views/AboutView.vue')
     },
     {
       path: '/settings',

@@ -11,6 +11,10 @@ const navigateToQuiz = (id:number) => {
     router.push(`/quiz/${id}`);
 }
 
+function navigateToSettings() {
+    router.push(`/settings`);
+}
+
 </script>
 
 <template>
@@ -27,7 +31,7 @@ const navigateToQuiz = (id:number) => {
             </div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" @click="navigateToSettings()">
         <div class="card-text">
             <h2>Instellingen</h2>
         </div>

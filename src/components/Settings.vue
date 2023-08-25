@@ -2,10 +2,12 @@
 import IProvince from "../interfaces/IProvince"
 import { ref, onMounted } from 'vue'
 import dataProvince from "../data/Province.json"
+import {useRouter} from "vue-router";
 
 /* ---- vars ---- */
 let quizDataProvinces:Array<IProvince> = [];
 let province = ref(0);
+const router = useRouter();
 getQuizData();
 
 /* ---- methods ---- */
@@ -54,23 +56,33 @@ function levelToText(input:number){
     return levelText;
 }
 
+function navigateToHome() {
+    router.push(`/`);
+}
+
+
 </script>
 
 <template>
-<div class="container">
-    <div class="settings-dropdown">
-        <select 
-            @change="getQuizData()"
-            v-model="province"
-        >
-            <option value=0>Antwerpen</option>
-            <option value=1>West-Vlaanderen</option>
-            <option value=2>Oost-Vlaanderen</option>
-            <option value=3>Limburg</option>
-            <option value=4>Vlaams-Brabant</option>
-        </select>
+<div class="container-settings">
+    <div class="settings-header">
+        <div class="settings-dropdown">
+            <select 
+                @change="getQuizData()"
+                v-model="province"
+            >
+                <option value=0>Antwerpen</option>
+                <option value=1>West-Vlaanderen</option>
+                <option value=2>Oost-Vlaanderen</option>
+                <option value=3>Limburg</option>
+                <option value=4>Vlaams-Brabant</option>
+            </select>
+            
+        </div>
+        <div class="btn">
+            <button v-on:click="navigateToHome()">Terug naar menu</button>
+        </div>
     </div>
-
     <div class="settings-province" >
         <h1>{{ quizDataProvinces[province].name }}</h1>
         <div class="all-towns">
@@ -100,8 +112,11 @@ function levelToText(input:number){
 </template>
 
 <style>
-.container {
+.settings-header {
     /*max-width: 1000px;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 .all-towns {
     display: flex;
