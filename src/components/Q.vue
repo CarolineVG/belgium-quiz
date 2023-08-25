@@ -45,6 +45,7 @@ function getQuizData() {
         let jsondata = JSON.parse(localStorage.getItem("data") || "[]");
         quizDataProvinces = jsondata;
     }
+    quizName.value = quizDataProvinces[quizId].name
 }
 
 function startQuiz() {
