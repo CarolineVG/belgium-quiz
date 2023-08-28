@@ -4,7 +4,8 @@ import { useRoute } from "vue-router";
 import { ref, onMounted } from 'vue'
 import dataProvince from "../data/Province.json"
 // todo: svg from all provinces! 
-import Svg from "../components/Antwerp/Svg.vue"
+import SvgAntwerpen from "../components/Antwerp/Svg.vue"
+import SvgWestVlaanderen from "../components/WestVlaanderen/Svg.vue"
 import {useRouter} from "vue-router";
 
 
@@ -29,10 +30,18 @@ let score = ref(0);
 let quizState = ref('start');
 let totalQuestions = ref(0);
 
+let showAntwerpen = ref(false);
+let showWestVlaanderen = ref(false);
+let showOostVlaanderen = ref(false);
+let showLimburg = ref(false);
+let showVlaamsBrabant = ref(false);
+
 
 // loaded
 onMounted(() => {
     getQuizData();
+    loadSvg();
+    console.log('status ' + showWestVlaanderen.value);
 })
 
 /* ---- methods ---- */
@@ -53,6 +62,48 @@ function startQuiz() {
     questions = generateQuestions(quizLevelChoice.value, totalQuestions.value);
     quizState.value = 'ongoing';
     console.log(questions)
+}
+
+function loadSvg(){
+    switch (quizName.value) {
+        case "Antwerpen":
+            showAntwerpen.value = true;
+            showWestVlaanderen.value = false;
+            showOostVlaanderen.value = false;
+            showLimburg.value = false;
+            showVlaamsBrabant.value = false;
+            break;
+        case "West-Vlaanderen":
+            showAntwerpen.value = false;
+            showWestVlaanderen.value = true;
+            showOostVlaanderen.value = false;
+            showLimburg.value = false;
+            showVlaamsBrabant.value = false;       
+            break;
+        case "Oost-Vlaanderen":
+            showAntwerpen.value = false;
+            showWestVlaanderen.value = false;
+            showOostVlaanderen.value = true;
+            showLimburg.value = false;
+            showVlaamsBrabant.value = false;        
+            break;
+        case "Limburg":
+            showAntwerpen.value = false;
+            showWestVlaanderen.value = false;
+            showOostVlaanderen.value = false;
+            showLimburg.value = true;
+            showVlaamsBrabant.value = false;          
+            break;
+        case "Vlaams-Brabant":
+            showAntwerpen.value = false;
+            showWestVlaanderen.value = false;
+            showOostVlaanderen.value = false;
+            showLimburg.value = false;
+            showVlaamsBrabant.value = true;           
+            break;
+        default:
+            break;
+    }
 }
 
 function levelToNumber(input: string) {
@@ -91,6 +142,7 @@ function generateQuestions(quizLevel: string, amount: number) {
 }
 
 function checkTown(event: string) {
+    console.log('check town in quiz')
     if (event.toLowerCase() == questions[currentQuestion].toLowerCase()) {
         feedback.value = 'correct, gemeente is ' + event;
         score.value++;
@@ -162,10 +214,13 @@ function navigateToHome() {
             </div>
             <div class="svg-screen">
                 <div v-if="!showNextQuestion" class="svg-clickable">
-                    <Svg @getTown="checkTown($event)"></Svg>
+                    <div v-if="showAntwerpen"><SvgAntwerpen @getTown="checkTown($event)"></SvgAntwerpen></div>
+                    <div v-if="showWestVlaanderen"><SvgWestVlaanderen @getTown="checkTown($event)"></SvgWestVlaanderen></div>
+                    
                 </div>
                 <div v-else-if="showNextQuestion" class="svg-non-clickable">
-                    <Svg></Svg>
+                    <div v-if="showAntwerpen"><SvgAntwerpen @getTown="checkTown($event)"></SvgAntwerpen></div>
+                    <div v-if="showWestVlaanderen"><SvgWestVlaanderen @getTown="checkTown($event)"></SvgWestVlaanderen></div>
                 </div>
             </div>
             <div class="feedback-screen">
